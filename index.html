@@ -1,624 +1,142 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6efe5">
-  <meta name="description" content="A small birthday archive for myqtpi — made with memories, jokes, and love.">
-  <title>myqtpi — a birthday archive</title>
-  <style>
-    :root {
-      --paper: #f6efe5;
-      --paper-deep: #eadaca;
-      --ink: #2f2928;
-      --muted: #776b68;
-      --rose: #b9535a;
-      --rose-deep: #853d49;
-      --orange: #d98355;
-      --sky: #9bb9c2;
-      --night: #17191d;
-      --night-ink: #f3ebe1;
-      --line: rgba(47, 41, 40, .16);
-      --serif: Georgia, 'Times New Roman', serif;
-      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
-      --shadow: 0 18px 60px rgba(75, 46, 40, .14);
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      color: var(--ink);
-      background: var(--paper);
-      font-family: var(--sans);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    body.is-locked { overflow: hidden; }
-    button, input { font: inherit; }
-    button { cursor: pointer; }
-    img { display: block; max-width: 100%; }
-    a { color: inherit; }
-
-    .entry {
-      position: fixed;
-      inset: 0;
-      z-index: 50;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: var(--paper);
-      transition: opacity .8s ease, visibility .8s ease;
-    }
-    .entry.is-open { opacity: 0; visibility: hidden; pointer-events: none; }
-    .entry::before {
-      content: '';
-      position: absolute;
-      width: min(66vw, 620px);
-      aspect-ratio: 1;
-      border: 1px solid rgba(185,83,90,.22);
-      border-radius: 50%;
-      transform: rotate(-13deg);
-    }
-    .entry-card {
-      position: relative;
-      width: min(100%, 680px);
-      padding: clamp(28px, 7vw, 68px);
-      background: rgba(255, 251, 246, .8);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-    .eyebrow, .section-label {
-      margin: 0 0 14px;
-      color: var(--rose-deep);
-      font: 700 .72rem/1.2 var(--mono);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-    }
-    .entry h1 {
-      max-width: 9ch;
-      margin: 0;
-      font: 400 clamp(3.5rem, 12vw, 8rem)/.86 var(--serif);
-      letter-spacing: -.08em;
-    }
-    .entry h1 em { color: var(--rose); font-style: normal; }
-    .entry-copy {
-      max-width: 45ch;
-      margin: 28px 0 32px;
-      color: var(--muted);
-      font-family: var(--serif);
-      font-size: clamp(1.1rem, 2vw, 1.35rem);
-    }
-    .entry-status {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      margin: 0 0 25px;
-      padding-top: 16px;
-      border-top: 1px solid var(--line);
-      color: var(--muted);
-      font: .73rem/1.4 var(--mono);
-    }
-
-    .primary-btn, .text-btn {
-      min-height: 46px;
-      border: 0;
-      transition: transform .2s ease, background .2s ease, color .2s ease;
-    }
-    .primary-btn {
-      padding: 12px 18px;
-      color: #fff9f1;
-      background: var(--rose-deep);
-      font-weight: 700;
-    }
-    .primary-btn:hover, .primary-btn:focus-visible { background: var(--rose); transform: translateY(-2px); }
-    .primary-btn:focus-visible, .text-btn:focus-visible, input:focus-visible { outline: 3px solid rgba(185,83,90,.35); outline-offset: 3px; }
-    .text-btn { padding: 8px 0; color: var(--rose-deep); background: transparent; font-weight: 700; }
-    .text-btn:hover { color: var(--rose); }
-
-    main { opacity: 0; transition: opacity .8s ease .15s; }
-    main.is-ready { opacity: 1; }
-    .site-nav {
-      position: fixed;
-      z-index: 20;
-      top: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 15px clamp(18px, 5vw, 72px);
-      border-bottom: 1px solid rgba(47,41,40,.1);
-      background: rgba(246,239,229,.84);
-      backdrop-filter: blur(12px);
-    }
-    .nav-mark { color: var(--rose-deep); font: 700 .85rem var(--mono); letter-spacing: .04em; }
-    .music-control { display: flex; align-items: center; gap: 10px; color: var(--muted); font: .7rem var(--mono); }
-    .music-toggle {
-      width: 42px; height: 32px; padding: 0;
-      color: var(--rose-deep); background: transparent; border: 1px solid var(--line);
-    }
-    .music-toggle.is-playing { color: #fff; background: var(--rose-deep); }
-    .volume { width: 72px; accent-color: var(--rose-deep); }
-
-    .hero {
-      min-height: 100svh;
-      display: grid;
-      align-items: end;
-      padding: 130px clamp(20px, 7vw, 110px) 70px;
-      background: var(--paper);
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, .85fr) minmax(280px, 1.15fr);
-      gap: clamp(34px, 8vw, 120px);
-      align-items: end;
-      max-width: 1320px;
-      width: 100%;
-      margin: auto;
-    }
-    .hero h2 {
-      max-width: 9ch;
-      margin: 0;
-      font: 400 clamp(4.6rem, 12vw, 11rem)/.82 var(--serif);
-      letter-spacing: -.085em;
-    }
-    .hero h2 span { color: var(--rose); }
-    .hero-deck {
-      max-width: 38ch;
-      margin: 30px 0 0;
-      color: var(--muted);
-      font-family: var(--serif);
-      font-size: clamp(1.15rem, 2.1vw, 1.55rem);
-    }
-    .hero-image-wrap { position: relative; }
-    .hero-image {
-      width: 100%;
-      max-height: 76vh;
-      object-fit: cover;
-      object-position: center 26%;
-      filter: saturate(.88) contrast(.96);
-      box-shadow: var(--shadow);
-    }
-    .image-caption {
-      position: absolute;
-      right: 14px;
-      bottom: 14px;
-      max-width: 19ch;
-      margin: 0;
-      padding: 9px 11px;
-      color: #fff9f1;
-      background: rgba(47,41,40,.78);
-      font: .68rem/1.35 var(--mono);
-    }
-    .scroll-note { margin: 42px 0 0; color: var(--muted); font: .72rem var(--mono); }
-
-    .dark-section {
-      color: var(--night-ink);
-      background: var(--night);
-    }
-    .dark-section .section-label { color: #e8a0a0; }
-    .dark-section .muted { color: #b9aaa2; }
-    .dark-section .text-btn { color: #f1b2ae; }
-
-    .intro {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(260px, .7fr);
-      gap: clamp(32px, 8vw, 120px);
-      align-items: center;
-      padding: clamp(80px, 13vw, 180px) clamp(20px, 9vw, 150px);
-    }
-    .intro h3, .letter h3 {
-      max-width: 13ch;
-      margin: 0;
-      font: 400 clamp(2.9rem, 6.6vw, 7rem)/.94 var(--serif);
-      letter-spacing: -.06em;
-    }
-    .intro p { max-width: 44ch; color: #b9aaa2; font-family: var(--serif); font-size: 1.15rem; }
-    .quote { margin: 34px 0 0; padding-left: 20px; border-left: 1px solid #bd6b71; color: #f1d8c7; font: italic 1.4rem/1.35 var(--serif); }
-    .puung-frame { max-width: 430px; justify-self: end; transform: rotate(2.5deg); }
-    .puung-frame img { width: 100%; aspect-ratio: 1; object-fit: cover; }
-    .puung-frame figcaption { margin-top: 12px; color: #a99a92; font: .7rem var(--mono); }
-
-    .memories { padding: clamp(90px, 12vw, 180px) clamp(20px, 8vw, 126px); }
-    .section-head { display: flex; justify-content: space-between; gap: 30px; align-items: end; max-width: 1180px; margin: 0 auto 70px; }
-    .section-head h3 { max-width: 10ch; margin: 0; font: 400 clamp(3rem, 7vw, 7rem)/.86 var(--serif); letter-spacing: -.07em; }
-    .section-head p { max-width: 34ch; margin: 0; color: var(--muted); font-family: var(--serif); font-size: 1.1rem; }
-    .memory-list { max-width: 1180px; margin: auto; }
-    .memory {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(230px, .85fr);
-      gap: clamp(28px, 7vw, 100px);
-      align-items: center;
-      padding: 64px 0;
-      border-top: 1px solid var(--line);
-    }
-    .memory:nth-child(even) { grid-template-columns: minmax(230px, .85fr) minmax(0, 1.15fr); }
-    .memory:nth-child(even) .memory-art { order: 2; }
-    .memory-art { position: relative; }
-    .memory-art img { width: 100%; max-height: 620px; object-fit: cover; box-shadow: var(--shadow); }
-    .memory-art.tall img { aspect-ratio: 4/5; }
-    .memory-art.wide img { aspect-ratio: 4/3; }
-    .memory-art.small img { width: 84%; margin-left: auto; aspect-ratio: 1/1.1; object-fit: cover; }
-    .memory-art::after { content: ''; position: absolute; inset: 14px -14px -14px 14px; border: 1px solid rgba(185,83,90,.28); z-index: -1; }
-    .memory-copy { max-width: 42ch; }
-    .memory-kicker { margin: 0 0 14px; color: var(--rose-deep); font: 700 .7rem var(--mono); letter-spacing: .12em; text-transform: uppercase; }
-    .memory h4 { margin: 0; font: 400 clamp(2rem, 4.2vw, 4.2rem)/.94 var(--serif); letter-spacing: -.055em; }
-    .memory p { margin: 20px 0 0; color: var(--muted); font-family: var(--serif); font-size: 1.12rem; }
-    .memory-date { margin-top: 22px; color: var(--orange); font: .72rem var(--mono); }
-
-    .interlude { display: grid; grid-template-columns: 1fr 1fr; min-height: 60vh; }
-    .interlude-copy { display: grid; align-content: center; padding: clamp(50px, 8vw, 110px); background: var(--paper-deep); }
-    .interlude-copy h3 { max-width: 9ch; margin: 0; font: 400 clamp(3rem, 6vw, 6.8rem)/.86 var(--serif); letter-spacing: -.07em; }
-    .interlude-copy p { max-width: 34ch; color: var(--muted); font-family: var(--serif); font-size: 1.1rem; }
-    .interlude-art { display: grid; place-items: center; padding: clamp(28px, 5vw, 80px); background: #dfc7a9; }
-    .interlude-art img { width: min(100%, 420px); max-height: 520px; object-fit: contain; transform: rotate(-3deg); box-shadow: 0 20px 50px rgba(75,46,40,.16); }
-
-    .patches { padding: clamp(80px, 11vw, 150px) clamp(20px, 8vw, 120px); background: #ece1d4; }
-    .patches-inner { max-width: 920px; margin: auto; }
-    .patches h3 { margin: 0 0 42px; font: 400 clamp(3rem, 7vw, 7rem)/.86 var(--serif); letter-spacing: -.07em; }
-    .patch-line { display: grid; grid-template-columns: 110px 1fr; gap: 24px; padding: 20px 0; border-top: 1px solid var(--line); }
-    .patch-version { color: var(--rose-deep); font: .72rem var(--mono); }
-    .patch-line p { margin: 0; color: var(--ink); font-family: var(--serif); }
-    .patch-line small { display: block; margin-top: 4px; color: var(--muted); font: .7rem var(--mono); }
-
-    .quiz { padding: clamp(80px, 12vw, 160px) clamp(20px, 7vw, 100px); background: var(--sky); }
-    .quiz-inner { max-width: 780px; margin: auto; }
-    .quiz h3 { max-width: 9ch; margin: 0 0 28px; font: 400 clamp(3.2rem, 7vw, 7rem)/.86 var(--serif); letter-spacing: -.07em; }
-    .quiz-card { padding: clamp(24px, 5vw, 48px); background: rgba(246,239,229,.78); border: 1px solid rgba(47,41,40,.16); }
-    .quiz-question { margin: 0 0 24px; font: 400 clamp(1.45rem, 3vw, 2.3rem)/1.1 var(--serif); }
-    .answers { display: grid; gap: 10px; }
-    .answer { min-height: 48px; padding: 11px 14px; text-align: left; color: var(--ink); background: transparent; border: 1px solid var(--line); }
-    .answer:hover, .answer:focus-visible { color: #fff; background: var(--rose-deep); border-color: var(--rose-deep); }
-    .quiz-result { min-height: 2em; margin: 22px 0 0; color: var(--rose-deep); font: italic 1.2rem var(--serif); }
-
-    .letter { padding: clamp(90px, 13vw, 180px) clamp(20px, 9vw, 150px); }
-    .letter-grid { display: grid; grid-template-columns: .7fr 1.3fr; gap: clamp(38px, 9vw, 140px); max-width: 1180px; margin: auto; }
-    .letter-stamp { align-self: start; padding: 18px; border: 1px solid rgba(255,255,255,.25); color: #e8a0a0; font: .7rem/1.5 var(--mono); transform: rotate(-4deg); }
-    .letter-copy { max-width: 60ch; }
-    .letter-copy p { margin: 0 0 21px; color: #dccbc0; font-family: var(--serif); font-size: clamp(1.08rem, 2vw, 1.3rem); }
-    .letter-copy .signoff { margin-top: 35px; color: #f1b2ae; font-size: 1.55rem; }
-
-    .wish { position: relative; overflow: hidden; display: grid; place-items: center; min-height: 88svh; padding: 80px 20px; text-align: center; background: var(--rose-deep); color: #fff8ef; }
-    .wish::before, .wish::after { content: '✦'; position: absolute; color: rgba(255,255,255,.28); font-size: 5rem; }
-    .wish::before { top: 12%; left: 12%; transform: rotate(15deg); }
-    .wish::after { right: 12%; bottom: 12%; transform: rotate(-20deg); }
-    .wish h3 { max-width: 10ch; margin: 0; font: 400 clamp(4rem, 12vw, 11rem)/.8 var(--serif); letter-spacing: -.09em; }
-    .wish p { max-width: 34ch; margin: 30px auto; color: #f8d9cf; font-family: var(--serif); font-size: 1.2rem; }
-    .wish .primary-btn { color: var(--rose-deep); background: #fff8ef; }
-    .wish .primary-btn:hover { color: #fff8ef; background: var(--ink); }
-    .wish-note { margin-top: 25px; color: #f7beb4; font: .7rem var(--mono); }
-    .confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-    .confetti i { position: absolute; top: -20px; width: 7px; height: 14px; background: #f3c785; animation: fall 3s linear forwards; }
-    .confetti i:nth-child(3n) { background: #f8e7c8; }
-    .confetti i:nth-child(4n) { background: #9bb9c2; }
-    @keyframes fall { to { transform: translateY(110vh) rotate(620deg); opacity: 0; } }
-
-    footer { padding: 22px; color: #b9aaa2; background: var(--night); text-align: center; font: .68rem var(--mono); }
-
-    @media (max-width: 760px) {
-      .site-nav { padding-inline: 16px; }
-      .music-control span, .volume { display: none; }
-      .hero { padding-top: 105px; }
-      .hero-grid, .intro, .letter-grid { grid-template-columns: 1fr; }
-      .hero h2 { max-width: 8ch; }
-      .hero-image { max-height: 58vh; }
-      .puung-frame { justify-self: start; max-width: 300px; }
-      .section-head { display: block; margin-bottom: 35px; }
-      .section-head p { margin-top: 22px; }
-      .memory, .memory:nth-child(even) { grid-template-columns: 1fr; gap: 30px; padding: 48px 0; }
-      .memory:nth-child(even) .memory-art { order: 0; }
-      .memory-art.small img { width: 100%; }
-      .interlude { grid-template-columns: 1fr; }
-      .interlude-art { min-height: 340px; }
-      .patch-line { grid-template-columns: 1fr; gap: 6px; }
-      .letter-stamp { max-width: 220px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#161417">
+<meta name="description" content="myqtpi — a birthday archive of Romana and Suhas.">
+<title>myqtpi — the archive</title>
+<style>
+:root{--ink:#f5efe7;--muted:#b8ada6;--dim:#807771;--night:#161417;--panel:#211e22;--panel2:#2a2529;--rose:#ee8f91;--peach:#f0c2a9;--gold:#e6bd76;--blue:#9bb9c2;--line:rgba(245,239,231,.15);--serif:Georgia,'Times New Roman',serif;--sans:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'SFMono-Regular',Consolas,'Liberation Mono',monospace;}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--night);color:var(--ink);font-family:var(--sans)}body{overflow:hidden}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--rose);outline-offset:3px}img{display:block;max-width:100%}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.entry{position:fixed;inset:0;z-index:30;display:grid;place-items:center;padding:24px;background:var(--night);transition:opacity .6s,visibility .6s}.entry.hide{opacity:0;visibility:hidden;pointer-events:none}.entry:before{content:'';position:absolute;width:min(70vw,720px);aspect-ratio:1;border:1px solid rgba(238,143,145,.24);border-radius:50%;transform:rotate(-18deg)}.entry-card{position:relative;width:min(100%,680px);padding:clamp(28px,7vw,72px);background:rgba(33,30,34,.88);border:1px solid var(--line);box-shadow:0 30px 100px rgba(0,0,0,.35)}.eyebrow,.kicker{margin:0 0 14px;color:var(--rose);font:700 .7rem/1.2 var(--mono);letter-spacing:.14em;text-transform:uppercase}.entry h1{margin:0;font:400 clamp(4rem,14vw,9rem)/.8 var(--serif);letter-spacing:-.09em}.entry h1 span{color:var(--rose)}.entry-copy{max-width:40ch;margin:28px 0;color:var(--muted);font:1.2rem/1.4 var(--serif)}.entry-meta{display:flex;justify-content:space-between;gap:14px;margin:28px 0 24px;padding-top:14px;border-top:1px solid var(--line);color:var(--dim);font:.7rem var(--mono)}.btn{min-height:44px;padding:11px 16px;border:1px solid var(--line);background:transparent;color:var(--ink);font-weight:700;transition:.2s}.btn:hover{transform:translateY(-2px);border-color:var(--rose);color:var(--rose)}.btn.primary{border-color:var(--rose);background:var(--rose);color:#271a1e}.btn.primary:hover{background:#ffb1a7;color:#271a1e}
+.app{height:100svh;display:grid;grid-template-rows:auto 1fr auto;opacity:0;transition:opacity .7s}.app.ready{opacity:1}.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px clamp(16px,4vw,52px);border-bottom:1px solid var(--line);background:rgba(22,20,23,.94);position:relative;z-index:4}.brand{color:var(--ink);text-decoration:none;font:700 .8rem var(--mono);letter-spacing:.05em}.brand b{color:var(--rose)}.top-actions{display:flex;align-items:center;gap:10px}.music{display:flex;align-items:center;gap:8px;color:var(--dim);font:.68rem var(--mono)}.music button{width:36px;height:32px;padding:0;color:var(--rose);border:1px solid var(--line);background:transparent}.music button.on{background:var(--rose);color:#281b1e}.volume{width:74px;accent-color:var(--rose)}.nav{display:flex;gap:6px}.nav button{padding:8px 10px;border:0;background:transparent;color:var(--dim);font:.7rem var(--mono)}.nav button.active,.nav button:hover{color:var(--ink)}
+.main{position:relative;min-height:0}.view{position:absolute;inset:0;display:none;min-height:0}.view.active{display:block}.archive{height:100%;display:grid;grid-template-columns:minmax(230px,.42fr) minmax(0,1.58fr);min-height:0}.side{display:flex;flex-direction:column;justify-content:space-between;min-height:0;padding:clamp(22px,4vw,54px);border-right:1px solid var(--line);background:linear-gradient(145deg,#201d21,#171517)}.side h2{max-width:7ch;margin:0;font:400 clamp(3rem,7vw,6.8rem)/.82 var(--serif);letter-spacing:-.08em}.side h2 em{color:var(--rose);font-style:normal}.side-copy{max-width:28ch;color:var(--muted);font:1rem/1.45 var(--serif)}.side-note{padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font:.68rem/1.45 var(--mono)}.archive-stage{display:grid;grid-template-rows:minmax(0,1fr) auto;min-width:0;min-height:0}.carousel{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:clamp(8px,2vw,24px);align-items:center;min-height:0;padding:clamp(15px,3vw,38px) clamp(14px,3vw,50px) 12px}.arrow{width:44px;height:48px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:1.3rem;transition:.2s}.arrow:hover{border-color:var(--rose);color:var(--rose)}.slide{display:grid;grid-template-rows:minmax(0,1fr) auto;min-width:0;min-height:0;height:100%;animation:slideIn .35s ease}.slide-media{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden;background:#0e0d0f;border:1px solid var(--line)}.slide-media img{width:100%;height:100%;max-height:calc(100svh - 210px);object-fit:contain;object-position:center;background:#0e0d0f}.slide-media .zoom{position:absolute;right:12px;bottom:12px;padding:7px 10px;border:1px solid rgba(255,255,255,.25);color:#fff;background:rgba(0,0,0,.55);font:.65rem var(--mono)}.slide-meta{display:flex;justify-content:space-between;gap:20px;padding:13px 0 0}.slide-title{margin:0;font:400 clamp(1.35rem,2.7vw,2.55rem)/.94 var(--serif);letter-spacing:-.04em}.slide-caption{max-width:54ch;margin:7px 0 0;color:var(--muted);font:clamp(.86rem,1.25vw,1rem)/1.35 var(--serif)}.slide-tag{display:inline-block;margin-bottom:7px;color:var(--rose);font:700 .62rem var(--mono);letter-spacing:.12em;text-transform:uppercase}.counter{flex:none;padding-top:5px;color:var(--dim);font:.7rem var(--mono);white-space:nowrap}.filmstrip{display:flex;gap:7px;overflow-x:auto;padding:10px clamp(14px,3vw,50px) 14px;border-top:1px solid var(--line);scrollbar-width:thin;scrollbar-color:var(--rose) transparent}.thumb{position:relative;flex:0 0 58px;height:58px;padding:0;border:1px solid var(--line);background:#0e0d0f;opacity:.55;transition:.2s}.thumb:hover,.thumb.active{opacity:1;border-color:var(--rose)}.thumb img{width:100%;height:100%;object-fit:contain}.thumb span{position:absolute;right:2px;bottom:2px;padding:1px 3px;background:rgba(0,0,0,.7);color:#fff;font:8px var(--mono)}
+.lightbox{position:fixed;inset:0;z-index:20;display:none;place-items:center;padding:30px;background:rgba(0,0,0,.92)}.lightbox.open{display:grid}.lightbox img{width:auto;height:auto;max-width:94vw;max-height:88vh;object-fit:contain}.lightbox button{position:absolute;top:20px;right:24px;width:42px;height:42px;border:1px solid rgba(255,255,255,.3);background:transparent;color:#fff;font-size:1.4rem}.lightbox p{position:absolute;left:24px;bottom:18px;margin:0;color:#ccc;font:.7rem var(--mono)}
+.panel{height:100%;overflow:auto;padding:clamp(30px,6vw,90px);background:#f0e5d8;color:#292326}.panel.dark{background:#171517;color:var(--ink)}.panel-inner{max-width:1000px;margin:auto}.panel h2{max-width:9ch;margin:0 0 38px;font:400 clamp(3.5rem,8vw,8rem)/.82 var(--serif);letter-spacing:-.08em}.panel-intro{max-width:45ch;margin:-15px 0 42px;color:#766b68;font:1.15rem/1.4 var(--serif)}.patch-list{border-top:1px solid rgba(41,35,38,.18)}.patch{display:grid;grid-template-columns:120px 1fr;gap:24px;padding:19px 0;border-bottom:1px solid rgba(41,35,38,.18)}.patch code{color:#9b4d57;font:.7rem var(--mono)}.patch p{margin:0;font:1.15rem/1.3 var(--serif)}.patch small{display:block;margin-top:5px;color:#766b68;font:.68rem var(--mono)}.letter-grid{display:grid;grid-template-columns:.65fr 1.35fr;gap:clamp(30px,8vw,120px);max-width:1100px;margin:auto}.letter-stamp{align-self:start;padding:16px;border:1px solid rgba(255,255,255,.22);color:var(--rose);font:.7rem/1.5 var(--mono);transform:rotate(-4deg)}.letter-copy{max-width:62ch}.letter-copy h2{max-width:12ch;margin:0 0 36px}.letter-copy p{margin:0 0 20px;color:#d7cbc2;font:clamp(1.08rem,1.8vw,1.3rem)/1.5 var(--serif)}.letter-copy .sign{margin-top:30px;color:#f4aaa7;font-size:1.55rem}
+.wishbar{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:12px clamp(16px,4vw,52px);border-top:1px solid var(--line);background:#1c191d}.wishbar span{color:var(--muted);font:.7rem var(--mono)}.wishbar .btn{min-height:38px;padding:7px 12px}.confetti{position:fixed;inset:0;z-index:15;pointer-events:none;overflow:hidden}.confetti i{position:absolute;top:-20px;width:7px;height:14px;background:var(--gold);animation:fall 3.3s linear forwards}.confetti i:nth-child(3n){background:var(--rose)}.confetti i:nth-child(4n){background:var(--blue)}@keyframes fall{to{transform:translateY(110vh) rotate(620deg);opacity:0}}@keyframes slideIn{from{opacity:.2;transform:translateX(12px)}to{opacity:1;transform:none}}
+@media(max-width:800px){body{overflow:hidden}.topbar{flex-wrap:wrap;padding:10px 14px}.nav{order:3;width:100%;justify-content:space-between;border-top:1px solid var(--line);padding-top:5px}.nav button{flex:1}.music span,.volume{display:none}.archive{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr)}.side{display:flex;flex-direction:row;align-items:end;gap:16px;padding:18px 16px;border-right:0;border-bottom:1px solid var(--line)}.side h2{font-size:3rem;max-width:5ch}.side-copy{margin-left:auto;max-width:24ch;font-size:.9rem}.side-note{display:none}.carousel{padding:10px 8px}.arrow{width:38px;height:42px}.slide-media img{max-height:calc(100svh - 340px)}.slide-meta{padding:9px 0 0}.slide-caption{font-size:.8rem;max-width:34ch}.counter{font-size:.62rem}.filmstrip{padding-inline:8px}.thumb{flex-basis:48px;height:48px}.panel{padding:30px 18px}.panel h2{font-size:4rem}.patch{grid-template-columns:1fr;gap:5px}.letter-grid{grid-template-columns:1fr}.letter-stamp{max-width:210px}.wishbar{padding:9px 14px}.wishbar span{max-width:20ch}.entry-meta{display:block}.entry-meta span{display:block;margin-top:6px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+</style>
 </head>
-<body class="is-locked">
-  <section class="entry" id="entry" aria-labelledby="entry-title">
-    <div class="entry-card">
-      <p class="eyebrow">private birthday archive · 05.11.2026</p>
-      <h1 id="entry-title">my<em>qt</em>pi</h1>
-      <p class="entry-copy">A small collection of ordinary moments, suspiciously strong feelings, and evidence that one particular woman is always the queen.</p>
-      <div class="entry-status"><span>recipient: my hobu bibi</span><span>version: birthday.∞</span></div>
-      <button class="primary-btn" id="openBtn">Open the archive</button>
+<body>
+<section class="entry" id="entry" aria-labelledby="entry-title">
+  <div class="entry-card">
+    <p class="eyebrow">private archive · birthday edition</p>
+    <h1 id="entry-title">my<span>qt</span>pi</h1>
+    <p class="entry-copy">A small museum of flowers, cafés, questionable memes, and one woman who can make a normal afternoon feel like a Satyajit Ray film.</p>
+    <div class="entry-meta"><span>recipient: my hobu bibi</span><span>status: permanently smitten</span></div>
+    <button class="btn primary" id="openBtn">Open the archive</button>
+  </div>
+</section>
+
+<div class="app" id="app" aria-hidden="true">
+  <header class="topbar">
+    <a class="brand" href="#" id="brand"><b>myqtpi</b> / birthday archive</a>
+    <div class="top-actions">
+      <div class="music" aria-label="Music controls"><span id="musicStatus">music waiting</span><button id="musicToggle" type="button" aria-label="Play music" aria-pressed="false">♫</button><label class="sr-only" for="volume">Music volume</label><input class="volume" id="volume" type="range" min="0" max="1" step=".01" value=".42"></div>
+      <nav class="nav" aria-label="Archive views"><button class="active" data-view="archive" type="button">archive</button><button data-view="patches" type="button">patch notes</button><button data-view="letter" type="button">the important part</button></nav>
     </div>
-  </section>
+  </header>
 
-  <main id="site" aria-hidden="true">
-    <nav class="site-nav" aria-label="Site navigation">
-      <a class="nav-mark" href="#top">myqtpi / birthday archive</a>
-      <div class="music-control" aria-label="Music controls">
-        <span id="musicStatus">music waiting</span>
-        <button class="music-toggle" id="musicToggle" type="button" aria-label="Play music" aria-pressed="false">♫</button>
-        <label class="sr-only" for="volume">Music volume</label>
-        <input class="volume" id="volume" type="range" min="0" max="1" step=".01" value=".42" aria-label="Music volume">
-      </div>
-    </nav>
-
-    <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero-grid">
-        <div>
-          <p class="section-label">for my pakhii</p>
-          <h2 id="hero-title">Happy birthday, <span>myqtpi.</span></h2>
-          <p class="hero-deck">After four years, an engagement, several cities, many cups of tea, and an unreasonable number of inside jokes, I still want the ordinary days with you.</p>
-          <p class="scroll-note">↓ keep going; the archive contains evidence</p>
-        </div>
-        <figure class="hero-image-wrap">
-          <img class="hero-image" src="images/our-engagement.jpg" alt="Suhas and Romana at their engagement, dressed in pink and holding hands">
-          <figcaption class="image-caption">22 October 2026 · future wife update successfully installed</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <section class="intro dark-section" aria-labelledby="ordinary-title">
-      <div>
-        <p class="section-label">the central thesis</p>
-        <h3 id="ordinary-title">I want the ordinary days with you.</h3>
-        <p>Not only the cinematic days, though we have collected a respectable number of those too. I mean the quiet cafés, the walks, the waiting, the flowers beneath the tree, the conversations that accidentally become the whole evening.</p>
-        <p class="quote">“If there is anything magical in this world, it is in understanding someone.”</p>
-      </div>
-      <figure class="puung-frame">
-        <img src="images/puuung-nose.jpg" alt="Puuung illustration of a couple sharing a playful moment at a table">
-        <figcaption>the Puuung principle: ordinary life, but with you</figcaption>
-      </figure>
-    </section>
-
-    <section class="memories" aria-labelledby="memories-title">
-      <div class="section-head">
-        <div><p class="section-label">a very serious archive of us</p><h3 id="memories-title">The evidence.</h3></div>
-        <p>Some memories are grand. Some are a hand, a flower, a paper chorki, or a very unnecessary gym flex. They all count.</p>
-      </div>
-      <div class="memory-list">
-        <article class="memory">
-          <figure class="memory-art tall"><img src="images/our-first-unoffiicial-date.jpg" alt="Suhas and Romana smiling together at Bengal Book" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">firsts · 2022</p><h4>The day we realised we really liked each other.</h4><p>You brought my favourite murgi-biryani back from Chattogram, and we went to Bengal Book at Dhanmondi 27. A very strong opening chapter.</p><p class="memory-date">Bengal Book · Dhanmondi 27</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/shilpokola-shadow-sideways.jpg" alt="Suhas and Romana as silhouettes at Bangladesh Shilpakala Academy" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">art · winter 2022</p><h4>Where conversations became their own kind of date.</h4><p>Shilpakala, exhibitions, films, books, and the complicated business of understanding human emotion. Also: where I first met you at a Charcoal exhibition.</p><p class="memory-date">Bangladesh Shilpakala Academy</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art small"><img src="images/shiuli-phool-heart.jpg" alt="A heart made from white shiuli flowers with orange centers" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">winter · ECE campus</p><h4>You made a heart out of fallen flowers.</h4><p>The shiuli tree made the morning smell intoxicating. You made this heart and sent it to me. Since then, winter has included a small ritual of collecting flowers for you.</p><p class="memory-date">the original heart · 2022</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/playing-chess-with-my-queen.jpg" alt="Romana sitting behind a chessboard at Chalchitro" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">shapa · 09.07.2023</p><h4>How can I win when my opponent is my queen?</h4><p>We went to Chalchitro after Shapa. The answer remains unresolved, mostly because I was distracted by the queen.</p><p class="memory-date">Chalchitro</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/maya-at-tea.jpg" alt="Two cups of coffee with Bengali writing and two hands meeting between them" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">chattogram · city tour</p><h4>You showed me the places that made you.</h4><p>Cheragi Mor, Tiger Pass, the old railway station, and Maya Caffee. Your city became a little more mine because you walked me through it.</p><p class="memory-date">Maya Caffee · Chattogram</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/lalbagh-mirror.jpg" alt="Suhas and Romana reflected together in an ornate handheld mirror at Lalbagh Fort" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">creative evidence</p><h4>Ancient-age lovers, briefly.</h4><p>At Lalbagh, among the tombs and minarets, we apparently time-travelled into the Mughal era. One of our favourite photographs, because subtlety is overrated when the composition is this good.</p><p class="memory-date">Lalbagh Fort</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/holding-hands-at-beach.jpg" alt="Suhas and Romana walking hand in hand through shallow seawater at Saint Martin" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">sea mode · 2025</p><h4>Saint Martin looked better with you in it.</h4><p>Watching the waves with you was the kind of romance that does not need a speech. You loved the island. I loved watching you love it.</p><p class="memory-date">Saint Martin</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art tall"><img src="images/me-giving-her-kiss.jpg" alt="Suhas kissing Romana's cheek behind the BUET Architecture Building" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">BUET · our corner</p><h4>Behind Architecture, where time gets less urgent.</h4><p>We sit there and talk to our hearts’ content. Sometimes the whole day becomes one long conversation, and I do not want to interrupt it.</p><p class="memory-date">behind the Architecture Building</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art tall"><img src="images/me-wearing-her-monkey-cap.jpg" alt="Suhas wearing Romana's pink monkey cap while she smiles beside him" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">winter · 04.01.2026</p><h4>You said I looked cute. The record will show that you were correct.</h4><p>You put your monkey cap on me, laughed, and took the picture. A devastatingly effective operation.</p><p class="memory-date">cuteness increased unexpectedly</p></div>
-        </article>
-        <article class="memory">
-          <figure class="memory-art wide"><img src="images/romana-came-to-my-gym.jpg" alt="Romana taking a gym mirror selfie while Suhas flexes behind her" loading="lazy"></figure>
-          <div class="memory-copy"><p class="memory-kicker">recent patch · 10.2026</p><h4>The gym relocation and the ceremonial flex.</h4><p>I took you to see the renovated gym. Naturally, I also had to demonstrate that my muscles had not been wasting away while I was busy loving you.</p><p class="memory-date">new gym · same fiancé</p></div>
-        </article>
-      </div>
-    </section>
-
-    <section class="interlude" aria-label="A small interruption">
-      <div class="interlude-copy"><p class="section-label">important research</p><h3>There is no meme. I just love you.</h3><p>Sometimes the archive needs a peer-reviewed interruption.</p></div>
-      <div class="interlude-art"><img src="images/i-just-love-you-catt.jpg" alt="Cat meme saying there is no meme, I just love you" loading="lazy"></div>
-    </section>
-
-    <section class="patches" aria-labelledby="patches-title">
-      <div class="patches-inner">
-        <p class="section-label">relationship patch notes</p>
-        <h3 id="patches-title">Release history.</h3>
-        <div class="patch-line"><div class="patch-version">v2022.0</div><p>First unofficial date deployed successfully.<small>Bengal Book · murgi-biryani dependency resolved</small></p></div>
-        <div class="patch-line"><div class="patch-version">v2023.07</div><p>Queen detected during chess match; fiancé victory probability reduced to zero.<small>Chalchitro · Shapa expansion pack</small></p></div>
-        <div class="patch-line"><div class="patch-version">v2025</div><p>Saint Martin beach mode unlocked.<small>Romana enjoyed the waves. Suhas enjoyed Romana enjoying the waves.</small></p></div>
-        <div class="patch-line"><div class="patch-version">v2026.01</div><p>Boy forced to wear monkey cap; cuteness unexpectedly increased.<small>Romana confirmed the result</small></p></div>
-        <div class="patch-line"><div class="patch-version">v2026.10</div><p>Gym relocation complete; fiancé performed unnecessary muscle demonstration.<small>performance considered acceptable</small></p></div>
-        <div class="patch-line"><div class="patch-version">v2026.10.22</div><p>Engagement update installed successfully.<small>future wife status now permanent</small></p></div>
-        <div class="patch-line"><div class="patch-version">known bug</div><p>Romana remains impossibly gorgeous in restaurants, parks, galleries, classrooms, and random photographs.<small>no fix planned</small></p></div>
-        <div class="patch-line"><div class="patch-version">limitation</div><p>Suhas still cannot win an argument when the opponent is his queen.<small>this is probably a feature</small></p></div>
-      </div>
-    </section>
-
-    <section class="quiz" aria-labelledby="quiz-title">
-      <div class="quiz-inner">
-        <p class="section-label">choose carefully</p>
-        <h3 id="quiz-title">A tiny test.</h3>
-        <div class="quiz-card">
-          <p class="quiz-question" id="quizQuestion">Who is the queen in the chess match?</p>
-          <div class="answers" id="answers">
-            <button class="answer" type="button" data-correct="true">Romana, obviously.</button>
-            <button class="answer" type="button" data-correct="false">The chessboard.</button>
-            <button class="answer" type="button" data-correct="false">A statistically neutral opponent.</button>
-          </div>
-          <p class="quiz-result" id="quizResult" aria-live="polite"></p>
-          <button class="text-btn" id="nextQuiz" type="button" hidden>Next question →</button>
+  <main class="main">
+    <section class="view active" id="archiveView" data-panel="archive">
+      <div class="archive">
+        <aside class="side">
+          <div><p class="kicker">for my pakhii</p><h2>Happy birthday, <em>myqtpi.</em></h2><p class="side-copy">Forty-seven pieces of evidence. No chronological order; that would be too orderly for us.</p></div>
+          <p class="side-note">Use ← →, the strip, or swipe the image.<br>Click any image for its full view.</p>
+        </aside>
+        <div class="archive-stage">
+          <div class="carousel" id="carousel"><button class="arrow" id="prev" type="button" aria-label="Previous image">←</button><article class="slide" id="slide"></article><button class="arrow" id="next" type="button" aria-label="Next image">→</button></div>
+          <div class="filmstrip" id="filmstrip" aria-label="All archive images"></div>
         </div>
       </div>
     </section>
 
-    <section class="letter dark-section" aria-labelledby="letter-title">
-      <div class="letter-grid">
-        <div><p class="section-label">the important part</p><div class="letter-stamp">written for<br>my fiancée<br>my hobu bibi<br>my pakhii</div></div>
-        <div class="letter-copy">
-          <h3 id="letter-title">My dear myqtpi,</h3>
-          <p>Happy birthday. I have been trying to gather our memories into one place, but the problem is that our life keeps producing more of them.</p>
-          <p>There is the grand version of us: four years of dating, an engagement at your home, and the feeling that the person I have loved for so long is becoming my future wife. I still catch myself looking at that photograph and thinking how stunning you looked, and how quietly enormous that moment was.</p>
-          <p>But there is also the version I love most: you making a heart out of shiuli flowers, us talking behind Architecture until the world becomes unimportant, walking through Saint Martin, copying a pose from <em>Before Sunrise</em>, playing chess while I fail because my opponent is my queen, or putting your monkey cap on me and deciding I look cute.</p>
-          <p>I do not need every day with you to be exciting. I want the ordinary days too. The dull days. The tea days. The days where we talk about art, films, books, work, food, fear, and everything in between. I want the life that keeps happening after the photographs are taken.</p>
-          <p>Maybe that is what it means to understand someone: to keep noticing them in all their forms, and to keep choosing them in all the ordinary moments. I choose you, pakhii. I would choose you again.</p>
-          <p class="signoff">With all my love,<br>Suhas</p>
-        </div>
-      </div>
-    </section>
+    <section class="view" id="patchesView" data-panel="patches"><div class="panel"><div class="panel-inner"><p class="kicker">relationship patch notes</p><h2>Release history.</h2><p class="panel-intro">A technically rigorous record of how one relationship acquired a queen, a shiuli protocol, and an alarming amount of emotional evidence.</p><div class="patch-list">
+      <div class="patch"><code>v2022.0</code><p>First unofficial date deployed.<small>Bengal Book · murgi-biryani dependency resolved</small></p></div>
+      <div class="patch"><code>v2023.07</code><p>Queen detected during chess match; victory probability reduced to zero.<small>Chalchitro · Shapa expansion pack</small></p></div>
+      <div class="patch"><code>v2025</code><p>Saint Martin beach mode unlocked.<small>Romana enjoyed the waves. Suhas enjoyed Romana enjoying the waves.</small></p></div>
+      <div class="patch"><code>v2026.01</code><p>Boy forced to wear monkey cap; cuteness unexpectedly increased.<small>Romana confirmed the result</small></p></div>
+      <div class="patch"><code>v2026.10</code><p>Gym relocation complete; fiancé performed unnecessary muscle demonstration.<small>performance considered acceptable</small></p></div>
+      <div class="patch"><code>v2026.10.22</code><p>Engagement update installed successfully.<small>future wife status now permanent</small></p></div>
+      <div class="patch"><code>known bug</code><p>Romana remains impossibly gorgeous in restaurants, parks, galleries, classrooms, and random photographs.<small>no fix planned</small></p></div>
+      <div class="patch"><code>limitation</code><p>Suhas still cannot win an argument when the opponent is his queen.<small>this is probably a feature</small></p></div>
+    </div></div></div></section>
 
-    <section class="wish" id="wish" aria-labelledby="wish-title">
-      <div class="confetti" id="confetti" aria-hidden="true"></div>
-      <div>
-        <p class="section-label" style="color:#f8c8bc">the wishing moment</p>
-        <h3 id="wish-title">Happy birthday,<br>my hobu bibi.</h3>
-        <p>May this year be kind to you, generous to you, and full of the kind of happiness you keep giving to everyone around you.</p>
-        <button class="primary-btn" id="wishBtn" type="button">Play the birthday wish</button>
-        <p class="wish-note" id="wishNote">birthday music is waiting for this moment</p>
-      </div>
-    </section>
-
-    <footer>myqtpi · loved, understood, admired, and permanently assigned to Suhas.</footer>
+    <section class="view" id="letterView" data-panel="letter"><div class="panel dark"><div class="letter-grid"><div><p class="kicker">the important part</p><div class="letter-stamp">written for<br>myqtpi<br>my fiancée<br>my hobu bibi<br>my pakhii</div></div><div class="letter-copy"><h2>My dear myqtpi,</h2><p>Happy birthday. I tried to gather our memories into one place, but our life keeps producing more of them. Very inconvenient. Very lovely.</p><p>There is the grand version of us: four years of dating, an engagement at your home, and the feeling that the person I have loved for so long is becoming my future wife. I still look at that photograph and think how stunning you looked, and how quietly enormous that moment was.</p><p>But there is also the version I love most: you making a heart out of shiuli flowers, us talking behind Architecture until the world becomes unimportant, walking through Saint Martin, copying a pose from <em>Before Sunrise</em>, discussing <em>1984</em> and <em>Forty Rules of Love</em>, or playing chess while I fail because my opponent is my queen.</p><p>I do not need every day with you to be exciting. I want the ordinary days too. The dull days. The tea days. The days where we talk about art, films, books, work, food, fear, and everything in between. I want the life that keeps happening after the photographs are taken.</p><p>Maybe that is what it means to understand someone: to keep noticing them in all their forms, and to keep choosing them in all the ordinary moments. I choose you, pakhii. I would choose you again.</p><p class="sign">With all my love,<br>Suhas</p></div></div></div></section>
   </main>
 
-  <audio id="audio" preload="auto"></audio>
-  <script>
-    const entry = document.getElementById('entry');
-    const site = document.getElementById('site');
-    const openBtn = document.getElementById('openBtn');
-    const audio = document.getElementById('audio');
-    const musicToggle = document.getElementById('musicToggle');
-    const musicStatus = document.getElementById('musicStatus');
-    const volume = document.getElementById('volume');
-    const wishBtn = document.getElementById('wishBtn');
-    const wishNote = document.getElementById('wishNote');
-    const confetti = document.getElementById('confetti');
+  <footer class="wishbar"><span id="wishNote">the birthday music is reserved for the wishing moment</span><button class="btn primary" id="wishBtn" type="button">Play birthday wish</button></footer>
+</div>
+<div class="lightbox" id="lightbox" aria-hidden="true"><button id="closeLightbox" type="button" aria-label="Close full image">×</button><img id="lightboxImage" alt=""><p id="lightboxCaption"></p></div><div class="confetti" id="confetti" aria-hidden="true"></div><audio id="audio" preload="auto"></audio>
 
-    const romanticTracks = [
-      'audio/alex-morgan-romantic-moments-love-emotional-background.mp3',
-      'audio/romantic-acoustic-nostalgic-music.mp3'
-    ];
-    const birthdayTrack = 'audio/birthday-music.mp3';
-    let trackIndex = Math.random() < .5 ? 0 : 1;
-    let isBirthdayTrack = false;
-    let hasStarted = false;
-
-    audio.volume = Number(volume.value);
-    audio.addEventListener('ended', () => {
-      if (!isBirthdayTrack) {
-        trackIndex = (trackIndex + 1) % romanticTracks.length;
-        playTrack(romanticTracks[trackIndex]);
-      }
-    });
-    audio.addEventListener('play', () => {
-      musicToggle.classList.add('is-playing');
-      musicToggle.setAttribute('aria-pressed', 'true');
-      musicToggle.setAttribute('aria-label', 'Pause music');
-      musicStatus.textContent = isBirthdayTrack ? 'birthday music' : 'romantic track';
-    });
-    audio.addEventListener('pause', () => {
-      musicToggle.classList.remove('is-playing');
-      musicToggle.setAttribute('aria-pressed', 'false');
-      musicToggle.setAttribute('aria-label', 'Play music');
-      musicStatus.textContent = 'music paused';
-    });
-    volume.addEventListener('input', () => { audio.volume = Number(volume.value); });
-
-    function playTrack(src) {
-      audio.src = src;
-      audio.load();
-      const attempt = audio.play();
-      if (attempt) attempt.catch(() => {
-        musicStatus.textContent = 'press ♫ for music';
-      });
-    }
-
-    function beginRomanticMusic() {
-      if (hasStarted) return;
-      hasStarted = true;
-      isBirthdayTrack = false;
-      playTrack(romanticTracks[trackIndex]);
-    }
-
-    openBtn.addEventListener('click', () => {
-      entry.classList.add('is-open');
-      document.body.classList.remove('is-locked');
-      site.classList.add('is-ready');
-      site.setAttribute('aria-hidden', 'false');
-      beginRomanticMusic();
-      setTimeout(() => document.getElementById('top').focus?.(), 500);
-    });
-
-    musicToggle.addEventListener('click', () => {
-      if (!audio.src) { beginRomanticMusic(); return; }
-      if (audio.paused) audio.play().catch(() => { musicStatus.textContent = 'browser blocked playback'; });
-      else audio.pause();
-    });
-
-    const quizQuestions = [
-      {
-        q: 'What does Suhas want even when life is boring?',
-        a: [['The ordinary days with Romana.', true], ['A rematch at chess.', false], ['A larger gym.', false]]
-      },
-      {
-        q: 'What is the correct response to “Who were you waiting for?”',
-        a: [['You. Since I was a teen. Why did you come so late?', true], ['The next train.', false], ['A better answer.', false]]
-      },
-      {
-        q: 'What does u = qtπ mean?',
-        a: [['You are my cutie pie.', true], ['A difficult engineering equation.', false], ['A valid reason to buy more cake.', false]]
-      }
-    ];
-    let quizIndex = 0;
-    const quizQuestion = document.getElementById('quizQuestion');
-    const answers = document.getElementById('answers');
-    const quizResult = document.getElementById('quizResult');
-    const nextQuiz = document.getElementById('nextQuiz');
-
-    function renderQuiz() {
-      const item = quizQuestions[quizIndex];
-      quizQuestion.textContent = item.q;
-      answers.innerHTML = item.a.map(([text, correct]) => `<button class="answer" type="button" data-correct="${correct}">${text}</button>`).join('');
-      quizResult.textContent = '';
-      nextQuiz.hidden = true;
-    }
-    answers.addEventListener('click', (event) => {
-      const button = event.target.closest('.answer');
-      if (!button) return;
-      const correct = button.dataset.correct === 'true';
-      quizResult.textContent = correct ? 'Correct. Romana is always right today. On other days too, probably.' : 'Interesting theory. Unfortunately, Romana is still right.';
-      Array.from(answers.children).forEach((b) => b.disabled = true);
-      if (quizIndex < quizQuestions.length - 1) nextQuiz.hidden = false;
-    });
-    nextQuiz.addEventListener('click', () => { quizIndex += 1; renderQuiz(); });
-
-    wishBtn.addEventListener('click', () => {
-      isBirthdayTrack = true;
-      audio.src = birthdayTrack;
-      audio.load();
-      audio.play().then(() => {
-        wishNote.textContent = 'birthday music playing · make a wish, my pakhii';
-      }).catch(() => {
-        wishNote.textContent = 'press ♫ above if the birthday music did not start';
-      });
-      confetti.innerHTML = Array.from({length: 48}, (_, i) => `<i style="left:${Math.random()*100}%; animation-delay:${Math.random()*1.2}s; transform:rotate(${Math.random()*90}deg)"></i>`).join('');
-      wishBtn.textContent = 'Birthday wish playing';
-      wishBtn.disabled = true;
-    });
-
-    document.querySelectorAll('a[href^="#"]').forEach((link) => {
-      link.addEventListener('click', (event) => {
-        const target = document.querySelector(link.getAttribute('href'));
-        if (!target) return;
-        event.preventDefault();
-        target.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
-      });
-    });
-  </script>
+<script>
+const images=[
+['our-engagement.jpg','the future wife update','engagement · 22.10.2026','After four years of dating, the event finally said it out loud: my future wife. You looked stunning.'],
+['our-first-unoffiicial-date.jpg','the opening chapter','firsts · 2022','You brought my favourite murgi-biryani from Chattogram. Bengal Book at Dhanmondi 27. We realised we really liked each other.'],
+['shilpokola-shadow-sideways.jpg','where it began to feel like us','art · winter 2022','Shilpakala, exhibitions, films, books, and the first conversations about human emotion. Also: where I first met you at a Charcoal exhibition.'],
+['shiuli-phool-heart.jpg','a heart from the tree','winter · 2022','You made this from fallen shiuli flowers at my ECE campus and sent it to me. It genuinely melted my heart.'],
+['playing-chess-with-my-queen.jpg','an unwinnable position','Shapa · 09.07.2023','At Chalchitro: “How can I win when my opponent is my queen?” The answer has survived peer review.'],
+['holding-hands-at-shapa.jpg','last Shapa, still holding on','Shapa · 16.04.2026','Our last Shapa of undergraduate life at BUET. Traditional clothes, linked hands, a quietly enormous day.'],
+['me-went-to-visit-her-city.jpg','your city, your tour','Chattogram','You wanted me to see the places you love: Cheragi Mor, Tiger Pass, the old railway station, and Maya Caffee.'],
+['maya-at-tea.jpg','two cups, one city','Maya Caffee · Chattogram','Coffee with Bengali writing, hands meeting between the cups. A small, perfect Chattogram moment.'],
+['lalbagh-mirror.jpg','ancient-age lovers','Lalbagh Fort','For a while we time-travelled into the Mughal era. The mirror provided evidence.'],
+['holding-hands-at-beach.jpg','Saint Martin mode','Saint Martin · 2025','Watching the waves with you was romantic enough. Watching you enjoy Saint Martin was better.'],
+['me-giving-her-kiss.jpg','our Architecture corner','BUET','Behind Architecture, where we sit and talk to our hearts’ content until time gives up.'],
+['me-wearing-her-monkey-cap.jpg','the cuteness incident','winter · 04.01.2026','You put your monkey cap on me, said I looked cute, and laughed. The record supports your claim.'],
+['romana-came-to-my-gym.jpg','the ceremonial flex','gym · 10.2026','I took you to see the renovated gym and performed a completely necessary demonstration of my muscles.'],
+['buet-playground.jpg','slanting evening','BUET playground','One evening stroll. Slanting sun. You looking so pretty that the photograph did not need help.'],
+['brihotto.jpg','a hidden little gem','Brihotto · Hazaribagh','You found this cozy artistic place through your architecture friend, tucked beneath the leather-factory labyrinths. Our second visit, and still welcoming.'],
+['me-lying-in-a-funny-way.jpg','gravity was optional','personal archive','No special occasion. Just me lying across cushions like a man who had temporarily resigned from normal posture.'],
+['my-diva.jpg','my diva, obviously','restaurant · 04.04.2026','You went to a fancy restaurant with friends. My heart skipped a beat. It was behaving normally before that.'],
+['gangsta-lady-at-gulshan.jpg','main character, gangster edition','Shahabuddin Park · Gulshan','I put my sunglasses on you. You immediately looked like the protagonist of a very stylish crime film.'],
+['she-gave-me-flowers.jpg','blushing with flowers','Bailey Road · 2022','Early in us: you gave me flowers while blushing the whole time. Opening up looked good on you.'],
+['mimicking-before-sunrise.jpg','a borrowed pose','Before Sunrise','We recreated the café pose from a film that is very close to our hearts.'],
+['before-sunrise.jpg','understanding is the magic','film · Before Sunrise','“If there is anything magical in this world, it is in understanding someone.” Our favourite kind of love.'],
+['gulmohar.jpg','a living artwork','Shilpakala','You stood among artworks and looked like one. I took the picture. The evidence is persuasive.'],
+['shiuli-phool-me.jpg','winter delivery service','ECE campus · shiuli season','My hand, your flowers. Every winter, the fallen shiuli became a small message for you.'],
+['shilpokola-shadow-straight.jpg','another Shilpakala silhouette','art · winter 2022','Same place, same beginning: exhibitions, interpretations, and conversations that went much further than the artwork.'],
+['holding-hands-at-last-pohela-boishakh.jpg','one chorki for my pakhii','Pohela Boishakh · second together','You wanted the colourful paper chorki. I bought you one. We held hands. A complete transaction.'],
+['selfie-cartoon.jpg','the scientifically accurate selfie','romantic illustration','One person takes the selfie. The other supplies the kiss. The methodology is sound.'],
+['pikachoose.jpg','a serious declaration','meme department','I pikachoose you to spend my life with. The pun was terrible. The decision was excellent.'],
+['math-u-qtpi.jpg','the only math I need','meme department','The equation is simple: u = qtπ. Finally, mathematics with a useful application.'],
+['me-your-hand.jpg','hand-holding request','meme department','A tiny kitten asking for your hand. Frankly, same.'],
+['i-just-love-you-catt.jpg','no meme detected','meme department','There is no meme. I just love you. A surprisingly efficient message.'],
+['sitting-in-despair-kid.jpg','waiting since teenage years','village · teenage Romana','“Who were you waiting for?” — “Been waiting for you since I was a teen huh, why did you come so late?”'],
+['making-me-blush.jpg','stop, pakhii','meme department','You are making me blush. The cat has filed a formal complaint.'],
+['kole-nao-amake.jpg','come here','meme department','Kole nao amake — pick me up, take me in your arms. A tiny emergency.'],
+['smile-now-please.jpg','mandatory smile break','meme department','Sorry for interrupting but you have to smile now please. The archive agrees.'],
+['hello-cutie.jpg','well hello, cutie','meme department','A cat in sunglasses has entered the conversation with excellent timing.'],
+['cat-giving-many-kisses.jpg','many kisses incoming','meme department','I’m gonna give you many kisses. Threat level: adorable.'],
+['cat-mwah.jpg','mwah','meme department','A compact kiss, professionally delivered.'],
+['cats-sitting-together.jpg','quiet company','meme department','Two cats sitting together. No speech required.'],
+['all-my-uwus-bear.jpg','all my uwus','meme department','For you: all my uwus. A complete emotional inventory.'],
+['being-with-me-bear.jpg','happiest with you','meme department','Being with you makes me feel the happiest I’ve ever felt. Thanks for being with me.'],
+['bigger-hug-bear.jpg','the biggest hug','meme department','I wanna give you the biggest hug. The bear has a plan.'],
+['hugging-you-bear.jpg','me / you','meme department','A bear hugging the bear labelled “You.” Very advanced relationship science.'],
+['milk-mocha-watching-tv.jpg','ordinary evening simulator','illustration · milkmochabear','Two bears, mugs, a blanket, television. The Puuung principle has competition.'],
+['puuung-nose.jpg','ordinary life, with you','Puuung','A playful everyday moment. This is the philosophy: even a dull day is worth choosing when it is with you.'],
+['puuung-about-to-hug.jpg','run to me','Puuung','Two people running toward a hug. A perfectly reasonable response to seeing you.'],
+['puuung-hug.jpg','forehead-kiss protocol','Puuung','An embrace, a forehead kiss, and nothing spectacular needed.'],
+['puuung-kiss.jpg','small kiss, large feeling','Puuung','A cheek kiss and the whole room becomes softer.']
+];
+const entry=document.getElementById('entry'),app=document.getElementById('app'),openBtn=document.getElementById('openBtn'),slide=document.getElementById('slide'),filmstrip=document.getElementById('filmstrip'),prev=document.getElementById('prev'),next=document.getElementById('next'),lightbox=document.getElementById('lightbox'),lightboxImage=document.getElementById('lightboxImage'),lightboxCaption=document.getElementById('lightboxCaption'),closeLightbox=document.getElementById('closeLightbox');
+const audio=document.getElementById('audio'),musicToggle=document.getElementById('musicToggle'),musicStatus=document.getElementById('musicStatus'),volume=document.getElementById('volume'),wishBtn=document.getElementById('wishBtn'),wishNote=document.getElementById('wishNote'),confetti=document.getElementById('confetti');
+let index=0,started=false,isBirthday=false;const romantic=['audio/alex-morgan-romantic-moments-love-emotional-background.mp3','audio/romantic-acoustic-nostalgic-music.mp3'];let track=Math.floor(Math.random()*2);
+function render(){const [file,title,tag,caption]=images[index];slide.innerHTML=`<div class="slide-media"><img src="images/${file}" alt="${title}: ${caption}" loading="eager"><button class="zoom" type="button">full view ↗</button></div><div class="slide-meta"><div><span class="slide-tag">${tag}</span><h3 class="slide-title">${title}</h3><p class="slide-caption">${caption}</p></div><div class="counter">${String(index+1).padStart(2,'0')} / ${String(images.length).padStart(2,'0')}</div></div>`;slide.querySelector('.zoom').addEventListener('click',()=>openFull(file,title));slide.querySelector('img').addEventListener('click',()=>openFull(file,title));filmstrip.querySelectorAll('.thumb').forEach((b,i)=>b.classList.toggle('active',i===index));const active=filmstrip.querySelector('.thumb.active');active?.scrollIntoView({block:'nearest',inline:'center'});}
+function openFull(file,title){lightboxImage.src=`images/${file}`;lightboxImage.alt=title;lightboxCaption.textContent=`${title} · ${file}`;lightbox.classList.add('open');lightbox.setAttribute('aria-hidden','false');}
+function closeFull(){lightbox.classList.remove('open');lightbox.setAttribute('aria-hidden','true');lightboxImage.removeAttribute('src');}
+function move(delta){index=(index+delta+images.length)%images.length;render();}
+images.forEach(([file,title],i)=>{const b=document.createElement('button');b.className='thumb';b.type='button';b.title=title;b.innerHTML=`<img src="images/${file}" alt="" loading="lazy"><span>${i+1}</span>`;b.addEventListener('click',()=>{index=i;render()});filmstrip.appendChild(b)});render();
+prev.addEventListener('click',()=>move(-1));next.addEventListener('click',()=>move(1));document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFull();if(lightbox.classList.contains('open'))return;if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)});lightbox.addEventListener('click',e=>{if(e.target===lightbox)closeFull()});closeLightbox.addEventListener('click',closeFull);
+let touchX=0;document.getElementById('carousel').addEventListener('touchstart',e=>touchX=e.changedTouches[0].screenX,{passive:true});document.getElementById('carousel').addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchX;if(Math.abs(dx)>45)move(dx<0?1:-1)},{passive:true});
+function play(src){audio.src=src;audio.load();const p=audio.play();if(p)p.catch(()=>musicStatus.textContent='press ♫ to start music')}
+function startMusic(){if(started)return;started=true;isBirthday=false;play(romantic[track])}
+audio.volume=Number(volume.value);volume.addEventListener('input',()=>audio.volume=Number(volume.value));audio.addEventListener('play',()=>{musicToggle.classList.add('on');musicToggle.setAttribute('aria-pressed','true');musicStatus.textContent=isBirthday?'birthday music':'romantic track'});audio.addEventListener('pause',()=>{musicToggle.classList.remove('on');musicToggle.setAttribute('aria-pressed','false');musicStatus.textContent='music paused'});audio.addEventListener('ended',()=>{if(!isBirthday){track=(track+1)%romantic.length;play(romantic[track])}});musicToggle.addEventListener('click',()=>{if(!audio.src)startMusic();else if(audio.paused)audio.play().catch(()=>musicStatus.textContent='browser blocked playback');else audio.pause()});
+openBtn.addEventListener('click',()=>{entry.classList.add('hide');app.classList.add('ready');app.setAttribute('aria-hidden','false');startMusic()});
+document.querySelectorAll('[data-view]').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b===btn));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.panel===btn.dataset.view))}));document.getElementById('brand').addEventListener('click',e=>{e.preventDefault();document.querySelector('[data-view="archive"]').click()});
+wishBtn.addEventListener('click',()=>{isBirthday=true;audio.src='audio/birthday-music.mp3';audio.load();audio.play().then(()=>wishNote.textContent='birthday music playing · make a wish, my pakhii').catch(()=>wishNote.textContent='press ♫ above if the birthday music did not start');wishBtn.textContent='birthday wish playing';wishBtn.disabled=true;confetti.innerHTML=Array.from({length:50},()=>`<i style="left:${Math.random()*100}%;animation-delay:${Math.random()*1.2}s;transform:rotate(${Math.random()*90}deg)"></i>`).join('')});
+</script>
 </body>
 </html>
