@@ -232,7 +232,7 @@ Avoid:
 - Heart/emoji decoration everywhere
 - Stock imagery
 - Fake metrics or generic “love dashboard” statistics
-- Autoplay music
+- Avoid autoplay music unless explicitly enabled by the visitor. The site should attempt to start the selected romantic track after the visitor's first interaction, provide a visible music toggle and volume control, shuffle the two romantic tracks during the memory journey, and switch to `birthday-music.mp3` at the final wishing moment. If playback is blocked, show a clear play control and continue normally without sound.
 - A dense collage of all 47 images
 
 ## 7. AI-slop guardrails
@@ -263,7 +263,7 @@ Required:
 - Alt text for every meaningful image
 - `prefers-reduced-motion` support
 - No interaction required to read the sincere letter
-- No autoplay audio or video
+- Audio starts only after a visitor interaction; no forced autoplay
 
 Optional:
 
@@ -324,6 +324,6 @@ Implementation preferences:
 
 ## 12. Confirmed remaining decisions
 
-- Include background music enabled by default to create a festive birthday atmosphere. Provide a clearly visible music toggle and volume control. If the browser blocks autoplay, show an immediate “Play birthday music” control and continue the site normally without sound until clicked. The site must remain fully usable without music, and the audio file must be local and user-supplied.
+- Include background music enabled by default after the visitor's first interaction to create a festive birthday atmosphere. Shuffle the two romantic tracks during the memory journey, then switch to `birthday-music.mp3` at the wishing moment. Provide a clearly visible music toggle and volume control. If the browser blocks playback, show an immediate “Play birthday music” control and continue the site normally without sound until clicked. The site must remain fully usable without music, and all audio files are local.
 - Use a deliberate mixed-order memory journey rather than strict chronology. Begin with emotional immediacy, move through shared places and recurring motifs, then finish with the engagement and birthday letter.
 - Address her using a varied set of affectionate names according to context: “myqtpi,” “my fiancée,” “my hobu bibi,” and “pakhii.” Use “Romana” when clarity or sincerity calls for her name.
