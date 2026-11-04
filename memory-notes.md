@@ -1,0 +1,60 @@
+# myqtpi memory notes
+
+## Puuung illustrations
+Puuung is a South Korean artist who illustrates the joy of simple, everyday things with the person you love. These illustrations resonate with Suhas and Romana's relationship: love is not always exciting, and life can be dull sometimes, but Suhas still wants to do ordinary life with Romana. This philosophy applies to all Puuung images in the collection; do not ask for separate context for each Puuung image.
+
+## General image rules
+- Any filename containing `cat` or `bear` refers to a meme image Suhas and Romana used to send each other. Do not ask for individual context for those files unless a later detail is needed.
+- If an image is clearly a meme, extract its visible content and record it without asking for relationship-specific context unless the user later volunteers more.
+
+## Date convention
+- If Suhas does not mention a year, interpret the date as the current year, 2026.
+
+## Image notes
+- `puuung-nose.jpg`: Puuung illustration of a couple at a table with snacks and tea/coffee; the boy gently touches the girl's nose. Represents the tenderness and playfulness of ordinary shared moments.
+- `my-diva.jpg`: On April 4 (year unspecified), Romana went to a posh, fancy restaurant with her friends. Suhas thought she looked gorgeous, and says his heart skipped a beat when he saw her.
+- `playing-chess-with-my-queen.jpg`: Taken on July 9, 2023, after Shapa at the restaurant Chalchitro. Shapa is a festive day at BUET when boys wear panjabi and girls wear sharee. Suhas and Romana played chess, and he jokingly said, “How can I win when my opponent is my queen?”
+- `holding-hands-at-shapa.jpg`: Taken on April 16, 2026, during the last Shapa of Suhas and Romana's undergraduate life at BUET. The image captures their hands gently linked while they wore traditional clothing.
+- `mimicking-before-sunrise.jpg`: Inspired by *Before Sunrise*, a film exceptionally close to Suhas and Romana's hearts. In the film, the characters come into a café together and strike a similar pose; this photograph recreates that shared visual moment. Date/place not specified.
+- `shilpokola-shadow-sideways.jpg`: Bangladesh Shilpakala Academy has a special place in Suhas and Romana's relationship. When they first started dating in winter 2022, they often visited art exhibitions there, discussed their interpretations, and talked about art, films, books, human emotions, and the intricacies of life. Suhas first met Romana at an exhibition hosted by BUET art club Charcoal for its newly appointed members; their first conversation also revolved around interpreting human emotions and life through art.
+- `shiuli-phool-heart.jpg`: In 2022, shortly after they started dating, Romana visited Suhas's ECE campus, where a shiuli tree filled the mornings with an intoxicating fresh smell. She collected fallen flowers and arranged them into a heart, then sent him the photograph; it melted his heart. Since then, whenever winter came, Suhas would collect flowers beneath the tree and send Romana photographs. The same context applies to the other filename containing `shiuli`.
+- `brihotto.jpg`: Brihotto is a cozy, artistic, welcoming place in Hazaribagh, hidden beneath the leather factories and intricate labyrinths of the area. This was Suhas and Romana's second visit. Romana first heard about it from her architecture friend, and they discovered the gem together. Date not specified.
+- `me-went-to-visit-her-city.jpg`: Romana was born in Chattogram, Bangladesh's port city, before moving to BUET to study Civil Engineering. She had always wanted Suhas to visit her city and the places she loved. During this visit they explored Cheragi Mor, Tiger Pass, Old Railway Station, and Maya Caffee together. The same context applies to the other filename containing `maya`.
+- `pikachoose.jpg`: A funny relationship meme featuring Pikachu and the line, “I pikachoose you to spend my life with.”
+- `me-wearing-her-monkey-cap.jpg`: Taken on January 4, 2026, during winter. Romana laughingly put her monkey cap on Suhas, told him he looked cute, and they took this picture.
+- `lalbagh-mirror.jpg`: One of Suhas and Romana's favorite creative pictures. At Lalbagh Fort, surrounded by Mughal-era tombs and minarets, the day felt like time travel into the Mughal era; they imagined themselves as lovers from an ancient age. Date not specified.
+- `before-sunrise.jpg`: Still from Richard Linklater's *Before Sunrise*, one of Suhas and Romana's favorite films. Their favorite quote from the image is, “If there is anything magical in this world, it is in understanding someone.” It connects deeply with a line from George Orwell's *1984*, another favorite book: “Perhaps one doesn't want to be loved so much as to be understood.” Understanding each other is a central emotional theme in their relationship.
+- `me-your-hand.jpg`: A funny meme showing a white-and-orange kitten peeking around a doorway with its paws extended. The overlaid labels read “me” and “your hand,” turning the image into a playful request to hold hands.
+- `i-just-love-you-catt.jpg`: A meme showing a fluffy kitten with the text, “there is no meme” and “I just love you.”
+- `selfie-cartoon.jpg`: A cute black-and-white cartoon of one person taking a selfie while another kisses their cheek. Small red hearts surround them; there is no readable text. It is an affectionate romantic illustration/meme.
+- `our-first-unoffiicial-date.jpg`: Their first unofficial date in 2022. After returning from Chattogram, Romana brought Suhas his favorite murgi-biryani. They went to Bengal Book in Dhanmondi 27, and that was the day they realized they really liked each other.
+- `shilpokola-shadow-straight.jpg`: A second silhouette photograph from Bangladesh Shilpakala Academy, carrying the same Shilpakala context: the place became special after Suhas and Romana started dating in winter 2022, when they visited exhibitions, discussed art, and talked about emotions, life, films, and books.
+- `gangsta-lady-at-gulshan.jpg`: During a winter visit to Shahabuddin Park in Gulshan, Suhas put his sunglasses on Romana; she looked like the main-character gangster of a film, inspiring the filename. Romana is now a lecturer at Presidency University, which is quite close to the park.
+- `romana-came-to-my-gym.jpg`: Taken in October 2026, after Suhas's gym changed locations and underwent renovations. He took Romana to show her the new gym—and, of course, to flex his muscles a little.
+- `she-gave-me-flowers.jpg`: Taken at a restaurant on Bailey Road in 2022, early in their relationship, when Suhas and Romana had just begun expressing their feelings and opening up to each other. Romana gave Suhas the flowers while blushing throughout.
+- `me-lying-in-a-funny-way.jpg`: A humorous personal photograph of Suhas lying sideways across several floor cushions indoors, wearing glasses, a plaid shirt, and brown trousers. The deliberately awkward pose is the entire joke; no additional context was provided.
+- `math-u-qtpi.jpg`: A romantic math-themed meme/illustration showing a white bear explaining equations at a board. Readable text includes “the only math i need to know” and “u = qtπ,” surrounded by sparkling pink hearts.
+- `sitting-in-despair-kid.jpg`: A funny photograph of Romana as a teenager at her village, sitting with her cheek on her hand in a pose that unintentionally mimics a famous Alia Bhatt pose. Suhas used to ask, “Who were you waiting for?” and Romana would reply, “Been waiting for you since I was a teen huh, why did you come so late?”
+- `hello-cutie.jpg`: A cat meme wearing black sunglasses surrounded by colorful hearts. The sunglasses read “Well hello” and “cutie.”
+- `maya-at-tea.jpg`: A photograph from the same Chattogram visit described in `me-went-to-visit-her-city.jpg`. It shows two cups of coffee with Bengali writing in the foam and Suhas and Romana holding hands between them at Maya Caffee.
+- `shiuli-phool-me.jpg`: A close-up of Suhas's hand holding a collection of white shiuli flowers with orange centers. It carries the same winter shiuli-tree context as `shiuli-phool-heart.jpg`: Suhas gathered fallen flowers from the ECE campus tree and sent Romana photographs.
+- `gulmohar.jpg`: Photograph taken at Shilpakala Academy. Romana is standing among framed artworks, and Suhas felt she herself looked like a living artwork, so he captured the moment. The image includes the Hindi lyrics “Girta hain gulmohar / Khwabon main raat bhar / Aise khwaabon se / Bahar nikalna / Zaroori.. hai.. kya?”
+- `holding-hands-at-last-pohela-boishakh.jpg`: Their second Pohela Boishakh celebration together. Romana wanted a colorful paper decoration called a `chorki` (চর্কি), so Suhas bought one for her; the photograph captures them holding hands while she carries it.
+- `smile-now-please.jpg`: A cat meme surrounded by pink hearts. The text reads, “sorry for interrupting but” and “you have to smile now please.”
+- `holding-hands-at-beach.jpg`: In 2025, Suhas and Romana visited Saint Martin. They walked hand in hand through the sea, watched the waves together, and found the experience deeply romantic; Romana especially enjoyed Saint Martin.
+- `me-giving-her-kiss.jpg`: Photograph taken at BUET behind the Architecture Building, a place where Suhas and Romana often sit together and talk to their hearts' content. Suhas is kissing Romana's cheek while gently holding her chin.
+- `milk-mocha-watching-tv.jpg`: A cute illustration of two bears sitting together under a blanket, drinking from mugs and watching television. A small green stuffed animal sits between them. The image is signed “milkmochabear.”
+- `kole-nao-amake.jpg`: A meme/screenshot showing a cartoon child reaching out with teary eyes. The overlaid text reads “Kole nao amake” (কোলে নাও আমাকে), meaning “Pick me up / Take me in your arms.”
+- `making-me-blush.jpg`: A romantic cat meme with a blushing kitten surrounded by pink hearts. The text reads, “stop” and “You are making me blush.”
+- `buet-playground.jpg`: One evening at the BUET playground, Suhas and Romana went for a stroll. The slanting sunlight made Romana look especially beautiful; the photograph shows them sitting together beneath a wide cloudy sky.
+- `our-engagement.jpg`: Photograph from Suhas and Romana's engagement at her residence on October 22, 2026. Romana wore an embellished pink outfit with floral jewelry, bangles, and henna; Suhas wore a light pink traditional outfit. After four years of dating, the event embodied the feeling that she was about to become his future wife. Suhas remembers her as looking absolutely stunning.
+- `all-my-uwus-bear.jpg`: A white bear holds a red heart amid pink hearts and sparkles. The text reads, “for you : all my uwus.”
+- `being-with-me-bear.jpg`: Two cute bears sit together; one holds a watermelon slice. The text reads, “being with you makes me feel the happiest i've ever felt” and “thanks for being with me!!”
+- `bigger-hug-bear.jpg`: A large white bear reaches toward the viewer for a hug. The text reads, “i wanna give u the biggest hug.”
+- `cat-giving-many-kisses.jpg`: Two orange cats nuzzle/kiss amid pink hearts and gift decorations. The text reads, “i’m gonna give you many kisses.”
+- `cat-mwah.jpg`: A close-up of a blushing cat leaning toward the viewer. The text reads, “*mwah*.”
+- `cats-sitting-together.jpg`: An illustration of a black cat and a white cat sitting side by side on a wall, viewed from behind. No readable text.
+- `hugging-you-bear.jpg`: A brown bear hugs a smaller blue bear labeled “You”; the brown bear is labeled “Me.” It is a wordless hug meme.
+- `puuung-about-to-hug.jpg`: Illustration of two people running toward each other with their arms open, apparently about to embrace. No readable text.
+- `puuung-hug.jpg`: Puuung illustration of a couple embracing; the man kisses the woman's forehead while she hugs him, with red hearts above them. No readable text.
+- `puuung-kiss.jpg`: Puuung illustration of a man kissing a smiling woman's cheek while gently holding her face. No readable text.
